@@ -1,5 +1,6 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {Injectable, InternalServerErrorException, Logger} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import {JwtPayloadDto} from './dto/jwt-payload.dto';
 
 @Injectable()
 export class JwtService {
@@ -7,27 +8,27 @@ export class JwtService {
     private readonly refreshSecret = process.env.JWT_REFRESH_SECRET ?? "";
     private readonly logger = new Logger(JwtService.name);
 
-    generateAccessToken(payload: any): string {
+    generateAccessToken(payload: JwtPayloadDto): string {
         if (!this.accessSecret) {
             this.logger.error(`JWT access secret is not defined`);
             throw new InternalServerErrorException('Authentication error');
         }
-        return jwt.sign(payload, this.accessSecret, { expiresIn: '15m' });
+        return jwt.sign(payload, this.accessSecret, {expiresIn: '5s'});
     }
 
-    generateRefreshToken(payload: any): string {
+    generateRefreshToken(payload: JwtPayloadDto): string {
         if (!this.refreshSecret) {
             this.logger.error(`JWT refresh secret is not defined`);
             throw new InternalServerErrorException('Authentication error');
         }
-        return jwt.sign(payload, this.refreshSecret, { expiresIn: '7d' });
+        return jwt.sign(payload, this.refreshSecret, {expiresIn: '7d'});
     }
 
-    verifyAccessToken(token: string): any {
-        return jwt.verify(token, this.accessSecret);
+    verifyAccessToken(token: string) {
+        return jwt.verify(token, this.accessSecret) as JwtPayloadDto;
     }
 
-    verifyRefreshToken(token: string): any {
-        return jwt.verify(token, this.refreshSecret);
+    verifyRefreshToken(token: string) {
+        return jwt.verify(token, this.refreshSecret) as JwtPayloadDto;
     }
 }

@@ -1,8 +1,11 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import * as bcrypt from 'bcryptjs';
+import { Types } from 'mongoose';
 
 @Schema()
 export class User {
+    _id: Types.ObjectId;
+
     @Prop({required: true, unique: true})
     email: string;
 
@@ -11,6 +14,9 @@ export class User {
 
     @Prop({required: true})
     password: string;
+
+    @Prop({type: String, default: null})
+    refreshToken: string;
 
     comparePassword: (password: string) => Promise<boolean>;
 }

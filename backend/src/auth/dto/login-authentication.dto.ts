@@ -1,6 +1,6 @@
 import { IsEmail, MinLength, Matches } from 'class-validator';
 
-export class SigninAuthenticationDto {
+export class LoginAuthenticationDto {
   @IsEmail({}, { message: 'Please provide your email' })
   email: string;
 

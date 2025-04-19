@@ -1,4 +1,4 @@
-import { IsEmail, MinLength, Matches } from 'class-validator';
+import {IsEmail, MinLength} from 'class-validator';
 
 export class LoginAuthenticationDto {
   @IsEmail({}, { message: 'Please provide your email' })

@@ -24,7 +24,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const handleTokenRefresh = (e: Event) => {
             const event = e as CustomEvent<LoginRes>;
-            console.log("update user", event.detail);
             setUser(event.detail);
         };
 

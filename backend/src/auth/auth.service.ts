@@ -33,7 +33,7 @@ export class AuthService {
         }
 
         const userPayload = {
-            id: existingUser._id,
+            id: existingUser._id.toString(),
             email: existingUser.email,
         };
 
@@ -67,7 +67,7 @@ export class AuthService {
         }
 
         const userPayload = {
-            id: user._id,
+            id: user._id.toString(),
             email: user.email,
         };
 

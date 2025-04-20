@@ -13,7 +13,7 @@ export class JwtService {
             this.logger.error(`JWT access secret is not defined`);
             throw new InternalServerErrorException('Authentication error');
         }
-        return jwt.sign(payload, this.accessSecret, {expiresIn: '5s'});
+        return jwt.sign(payload, this.accessSecret, {expiresIn: '15m'});
     }
 
     generateRefreshToken(payload: JwtPayloadDto): string {

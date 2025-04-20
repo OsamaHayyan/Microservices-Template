@@ -1,13 +1,14 @@
 <!-- TOC -->
 * [Project Overview](#project-overview)
+    * [This project consists of three main modules:](#this-project-consists-of-three-main-modules)
     * [Features](#features)
+* [API Documentation is available at the following link after starting the backend server:](#api-documentation-is-available-at-the-following-link-after-starting-the-backend-server)
 * [Development Setup](#development-setup)
     * [Prerequisites](#prerequisites)
     * [Running All Systems](#running-all-systems)
     * [Running All Systems With Docker](#running-all-systems-with-docker)
-    * [To connect to MongoDB running in Docker:](#to-connect-to-mongodb-running-in-docker)
+* [To connect to MongoDB running in Docker:](#to-connect-to-mongodb-running-in-docker)
     * [Access via MongoDB Compass](#access-via-mongodb-compass)
-      * [It's important to do the Prerequisites to run MongodDB Replica sets correctly or the backend and database won't run.](#its-important-to-do-the-prerequisites-to-run-mongoddb-replica-sets-correctly-or-the-backend-and-database-wont-run)
 * [MongoDB Replica Set Configuration](#mongodb-replica-set-configuration)
     * [Replica Set Requirements _(pre-configured in docker-compose)_](#replica-set-requirements-_pre-configured-in-docker-compose_)
     * [Network Configuration](#network-configuration)
@@ -22,7 +23,7 @@
 
 # Project Overview
 
-This project consists of three main modules:
+### This project consists of three main modules:
 
 1. **Client-side Application**: Built with React and Vite.
 2. **NestJS Server**: As the backend server and authentication server for client side.
@@ -34,21 +35,26 @@ production deployment and ready to use with SSH on cloud virtual machine.
 
 ### Features
 
+- **Documentation**: Comprehensive documentation for all APIs.
 - **Dockerization**: All modules are containerized for easy deployment and management.
 - **Optimized Docker Images**: Ensured minimal image sizes for production.
 - **Multi-stage Builds**: Used for different environment local, development and production.
+- **CI/CD Pipeline**: Automated deployment process using GitHub Actions.
+- **MongoDB Replica sets**: Configured for high availability and data redundancy.
 - **Hot Reloading**: Enabled for development across all systems.
 - **Reverse Proxy**: Configured in production for efficient routing.
-- **MongoDB Replica sets**: Configured for high availability and data redundancy.
 - **JWT Authentication**: Used for secure user authentication.
 - **Refresh Token Rotation**: Implemented for enhanced security.
-- **CI/CD Pipeline**: Automated deployment process using GitHub Actions.
 - **Environment Variables**: Configured, hosted and secured for both development and production environments in GitHub workflow.
 - **Fully Customizable**: The application is designed to be easily customizable for .
 - **Security**: Implemented best practices for securing the application and its data.
 
 ---
 
+# API Documentation is available at the following link after starting the backend server:
+[API Documentation](http://localhost:3003/api-docs)
+
+---
 # Development Setup
 
 ### Prerequisites
@@ -83,11 +89,11 @@ production deployment and ready to use with SSH on cloud virtual machine.
    VITE_BACKEND_API=http://localhost:3003
    EOF
    ```
-5. **Start Backend:**
+4. **Start Backend:**
    ```bash
    npm run start:dev --prefix backend
    ```
-6. **Start Frontend:**
+5. **Start Frontend:**
    ```bash
    npm run dev --prefix frontend
    ```
@@ -132,7 +138,7 @@ production deployment and ready to use with SSH on cloud virtual machine.
 
 ---
 
-### To connect to MongoDB running in Docker:
+# To connect to MongoDB running in Docker:
 
 ### Access via MongoDB Compass
 
@@ -142,7 +148,7 @@ production deployment and ready to use with SSH on cloud virtual machine.
     - **Connection String**:
       `mongodb://easygenerator:easygenerator_password@127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/`
 
-#### It's important to do the Prerequisites to run MongodDB Replica sets correctly or the backend and database won't run.
+**It's important to do the Prerequisites to run MongodDB Replica sets correctly or the backend and database won't run.**
 
 ---
 
@@ -159,7 +165,6 @@ The application uses a MongoDB replica set with one primary and two secondary no
 ### Network Configuration
 To run the MongoDB replica set properly, you must add the following to your host machine's `/etc/hosts` file:
 ```
-127.0.0.1 localhost
 0.0.0.0 host.docker.internal      # Change to the internal IP of your host machine
 0.0.0.0 gateway.docker.internal   # Change to the internal IP of your host machine
 ```

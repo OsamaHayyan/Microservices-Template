@@ -1,4 +1,7 @@
+import {Logger} from "@nestjs/common";
+
 const dbConfig = (): string => {
+    const logger = new Logger(dbConfig.name)
     const mode = process.env.MONGODB_MODE;
     const user = process.env.MONGODB_USERNAME;
     const pass = process.env.MONGODB_PASSWORD;
@@ -6,13 +9,19 @@ const dbConfig = (): string => {
 
     switch (mode) {
         case 'docker':
-            return `mongodb://${user}:${pass}@mongo-primary:27017,mongo-secondary-2:27018,mongo-secondary-3:27019/${db}?authSource=admin&replicaSet=rs0`;
+            const uri = `mongodb://${user}:${pass}@mongo-primary:27017,mongo-secondary-2:27018,mongo-secondary-3:27019/${db}?authSource=admin&replicaSet=rs0`;
+            logger.log("MongoDB URI: " + uri);
+            return uri
         case 'local':
         default:
             if (user && pass) {
-                return `mongodb://${user}:${pass}@localhost:27017/${db}?authSource=admin`;
+                const uri = `mongodb://${user}:${pass}@localhost:27017/${db}?authSource=admin`;
+                logger.log("MongoDB URI: " + uri);
+                return uri
             } else {
-                return `mongodb://localhost:27017/${db}`;
+                const uri = `mongodb://localhost:27017/${db}`;
+                logger.log("MongoDB URI: " + uri);
+                return uri
             }
     }
 };

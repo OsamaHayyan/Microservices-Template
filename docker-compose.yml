@@ -7,7 +7,6 @@ services:
     stdin_open: true
     volumes:
       - /app/node_modules
-      - ./frontend/.env.local:/app/.env
     develop:
       watch:
         - action: sync
@@ -36,7 +35,6 @@ services:
       - mongo-cluster
     volumes:
       - /usr/src/app/node_modules
-      - ./backend/.env.local:/usr/src/app/.env
     develop:
       watch:
         - action: sync
@@ -78,13 +76,15 @@ services:
       /usr/local/bin/docker-entrypoint.sh mongod --replSet rs0 --keyFile /data/keyfile.key --bind_ip_all --port 27017'
     image: 'mongo:7.0.0'
     ports:
-      - "0.0.0.0:27017:27017"
+      - "${MACHINE_INTERNAL_IP}:27017:27017"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=easygenerator
-      - MONGO_INITDB_ROOT_PASSWORD=easygenerator_password
-      - MONGO_INITDB_DATABASE=easygenerator
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGODB_DB}
     volumes:
       - 'mongo-primary-data-dev:/data/db'
       - 'mongo-primary-config-dev:/data/configdb'
@@ -93,7 +93,7 @@ services:
       test: mongosh
         -u $${MONGO_INITDB_ROOT_USERNAME}
         -p $${MONGO_INITDB_ROOT_PASSWORD}
-        --eval "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017',priority:1},{_id:1,host:'host.docker.internal:27018',priority:0.5},{_id:2,host:'host.docker.internal:27019',priority:0.5}]}) }" | mongosh --port 27017 --quiet
+        --eval "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'${MACHINE_EXTERNAL_IP}:27017',priority:1},{_id:1,host:'${MACHINE_EXTERNAL_IP}:27018',priority:0.5},{_id:2,host:'${MACHINE_EXTERNAL_IP}:27019',priority:0.5}]}) }" | mongosh --port 27017 --quiet
       interval: 5s
       timeout: 30s
       start_period: 0s
@@ -107,7 +107,7 @@ services:
     container_name: "mongo-secondary-2"
     image: 'mongo:7.0.0'
     ports:
-      - "0.0.0.0:27018:27018"
+      - "${MACHINE_INTERNAL_IP}:27018:27018"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -123,7 +123,7 @@ services:
     container_name: 'mongo-secondary-3'
     image: 'mongo:7.0.0'
     ports:
-      - "0.0.0.0:27019:27019"
+      - "${MACHINE_INTERNAL_IP}:27019:27019"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:

@@ -1,0 +1,90 @@
+name: Easy Generator CI
+
+on:
+  push:
+    branches:
+      - production
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/production' && 'production' || 'development' }}
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 3: Generate Database Environment File
+      - name: Generate Client .env
+        run: |
+          cat <<- EOF > .env
+          MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGODB_USERNAME }}
+          MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGODB_PASSWORD }}
+          MONGO_INITDB_DATABASE=${{ vars.MONGODB_DB }}
+          MACHINE_EXTERNAL_IP=${{ vars.MACHINE_EXTERNAL_IP }}
+          MACHINE_INTERNAL_IP=${{ vars.MACHINE_INTERNAL_IP }}
+          EOF
+
+      # Step 4: Generate Backend Environment File
+      - name: Generate Backend .env
+        run: |
+          cat <<- EOF > backend/.env
+          MONGODB_URI=${{ vars.BACKEND_MONGODB_URI }}
+          PORT=${{ vars.BACKEND_PORT }}
+          JWT_ACCESS_SECRET=${{ secrets.BACKEND_JWT_ACCESS_SECRET }}
+          JWT_REFRESH_SECRET=${{ secrets.BACKEND_JWT_REFRESH_SECRET }}
+          NODE_ENV=${{ vars.BACKEND_NODE_ENV }}
+          EOF
+
+      # Step 5: Generate Frontend Environment File
+      - name: Generate Frontend .env
+        run: |
+          cat <<- EOF > frontend/.env
+          VITE_BACKEND_API=${{ vars.CLIENT_API_BASE_URL }}
+          EOF
+
+      # Step 6: Install dependencies and build Nest.js app in backend
+      - name: Install & Build Backend
+        run: |
+          cd backend
+          npm ci
+          npm run build
+          rm -rf node_modules
+
+      # Step 7: Install dependencies and build Client app
+      - name: Install & Build Client
+        run: |
+          cd client
+          npm ci
+          npm run build
+          rm -rf node_modules
+
+      # Step 8: Deploy to Production server
+      - name: Deploy to Development server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ vars.REMOTE_HOST }}
+          REMOTE_USER: ${{ vars.REMOTE_USER }}
+          ARGS: "-rltgoDzvO --delete"
+          TARGET: ${{vars.REMOTE_TARGET}}
+          SCRIPT_AFTER_REQUIRED: true
+          SCRIPT_AFTER: |
+            echo "Deploying to Development server"
+            cd ${{vars.REMOTE_TARGET}}
+            echo "current directory"
+            pwd
+            echo "Building docker images"
+            docker compose -f docker-dev-compose.yml -p easy-generator up -d --build
+            echo "Images built"
+            whoami
+            ls -al
+            echo $RSYNC_STDOUT

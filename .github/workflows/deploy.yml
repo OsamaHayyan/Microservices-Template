@@ -23,12 +23,13 @@ jobs:
           node-version: '20'
 
       # Step 3: Generate Database Environment File
-      - name: Generate Client .env
+      - name: Generate Database .env
         run: |
           cat <<- EOF > .env
           MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }}
           MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}
           MONGODB_DB=${{ vars.MONGODB_DB }}
+          MONGODB_MODE=${{ vars.MONGODB_MODE }}
           MACHINE_EXTERNAL_IP=${{ vars.MACHINE_EXTERNAL_IP }}
           MACHINE_INTERNAL_IP=${{ vars.MACHINE_INTERNAL_IP }}
           EOF

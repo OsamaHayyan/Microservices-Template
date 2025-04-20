@@ -1,0 +1,150 @@
+services:
+  client:
+    container_name: client_dev
+    build:
+      context: frontend
+      target: development
+    stdin_open: true
+    volumes:
+      - /app/node_modules
+      - ./frontend/.env.local:/app/.env
+    develop:
+      watch:
+        - action: sync
+          path: frontend
+          target: /app
+          ignore:
+            - frontend/node_modules/
+        - action: rebuild
+          path: frontend/package.json
+    ports:
+      - "5173:5173"
+    networks:
+      - client-network
+    depends_on:
+      - backend
+    command: npm run dev
+
+  backend:
+    container_name: backend_dev
+    build:
+      context: backend
+      target: local
+    networks:
+      - backend-network
+      - client-network
+      - mongo-cluster
+    volumes:
+      - /usr/src/app/node_modules
+      - ./backend/.env.local:/usr/src/app/.env
+    develop:
+      watch:
+        - action: sync
+          path: backend
+          target: /usr/src/app
+          ignore:
+            - backend/node_modules/
+        - action: rebuild
+          path:
+            backend/package.json
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mongo-primary
+      - mongo-secondary-2
+      - mongo-secondary-3
+    command: npm run start:dev
+
+  # Rules for mongo cluster
+  # All replicas must have the same keyfile
+  # The primary replica must be the first in the list
+  # The primary replica must have priority 1
+  # The secondaries must have priority 0.5
+  # All Members should point to host of the machine ==> external IP ex. 34.171.172.170:27018
+  # Internal IP, External IP should be added for network policies allowed list
+  # It's important to add the following to /etc/hosts in the machine:
+  # 127.0.0.1 localhost
+  # 0.0.0.0 host.docker.internal  <== Change this IP to the internal IP of the host machine or your local machine
+  # 0.0.0.0 gateway.docker.internal <== Change this IP to the internal IP of the host machine or your local machine
+
+  mongo-primary:
+    container_name: 'mongo-primary'
+    entrypoint: >
+      /bin/bash -c '
+      mkdir -p /data &&
+      openssl rand -base64 756 > /data/keyfile.key &&
+      chmod 400 /data/keyfile.key &&
+      chown mongodb:mongodb /data/keyfile.key &&
+      /usr/local/bin/docker-entrypoint.sh mongod --replSet rs0 --keyFile /data/keyfile.key --bind_ip_all --port 27017'
+    image: 'mongo:7.0.0'
+    ports:
+      - "0.0.0.0:27017:27017"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=easygenerator
+      - MONGO_INITDB_ROOT_PASSWORD=easygenerator_password
+      - MONGO_INITDB_DATABASE=easygenerator
+    volumes:
+      - 'mongo-primary-data-dev:/data/db'
+      - 'mongo-primary-config-dev:/data/configdb'
+      - 'sharedconfig-dev:/data'
+    healthcheck:
+      test: mongosh
+        -u $${MONGO_INITDB_ROOT_USERNAME}
+        -p $${MONGO_INITDB_ROOT_PASSWORD}
+        --eval "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017',priority:1},{_id:1,host:'host.docker.internal:27018',priority:0.5},{_id:2,host:'host.docker.internal:27019',priority:0.5}]}) }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+    networks:
+      - mongo-cluster
+    restart: unless-stopped
+
+  mongo-secondary-2:
+    container_name: "mongo-secondary-2"
+    image: 'mongo:7.0.0'
+    ports:
+      - "0.0.0.0:27018:27018"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - 'mongo-secondary-2-data-dev:/data/db'
+      - 'mongo-secondary-2-config-dev:/data/configdb'
+      - 'sharedconfig-dev:/data'
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27018", "--keyFile", "/data/keyfile.key" ]
+    networks:
+      - mongo-cluster
+    restart: unless-stopped
+
+  mongo-secondary-3:
+    container_name: 'mongo-secondary-3'
+    image: 'mongo:7.0.0'
+    ports:
+      - "0.0.0.0:27019:27019"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - 'mongo-secondary-3-data-dev:/data/db'
+      - 'mongo-secondary-3-config-dev:/data/configdb'
+      - 'sharedconfig-dev:/data'
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27019", "--keyFile", "/data/keyfile.key" ]
+    networks:
+      - mongo-cluster
+    restart: unless-stopped
+
+networks:
+  client-network:
+  backend-network:
+  mongo-cluster:
+
+volumes:
+  mongo-primary-data-dev:
+  mongo-primary-config-dev:
+  mongo-secondary-2-data-dev:
+  mongo-secondary-2-config-dev:
+  mongo-secondary-3-data-dev:
+  mongo-secondary-3-config-dev:
+  sharedconfig-dev:

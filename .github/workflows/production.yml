@@ -1,0 +1,61 @@
+name: Easy Generator CI Production
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 4: Install dependencies and build Nest.js app in backend
+      - name: Install & Build Backend
+        run: |
+          cd backend
+          cp .env.production .env
+          npm ci
+          npm run build
+          rm -rf node_modules
+
+      # Step 4: Install dependencies and build Client app
+      - name: Install & Build Client
+        run: |
+          cd client
+          cp .env.production .env
+          npm ci
+          npm run build
+          rm -rf node_modules
+
+      # Step 5: Deploy to Production server
+      - name: Deploy to Production server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_PRODUCTION }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          ARGS: "-rltgoDzvO --delete"
+          TARGET: ${{secrets.REMOTE_TARGET}}
+          SCRIPT_AFTER_REQUIRED: true
+          SCRIPT_AFTER: |
+            echo "Deploying to production server"
+            cd ${{secrets.REMOTE_TARGET}}
+            echo "current directory"
+            pwd
+            echo "Building docker images"
+            export GOOGLE_APPLICATION_CREDENTIALS=/var/tmp/keys/ws-listen-0a05cafaeeab.json
+            docker compose -f docker-prod-compose.yml -p easy-generator up -d --build
+            echo "Images built"
+            whoami
+            ls -al
+            echo $RSYNC_STDOUT

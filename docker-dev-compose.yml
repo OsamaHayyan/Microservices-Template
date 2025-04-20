@@ -16,7 +16,7 @@ services:
     container_name: backend
     build:
       context: backend
-      target: production
+      target: build
     networks:
       - backend-network
       - client-network

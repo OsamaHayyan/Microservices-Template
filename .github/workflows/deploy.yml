@@ -85,7 +85,7 @@ jobs:
             echo "current directory"
             pwd
             echo "Building docker images"
-            docker compose -f docker-dev-compose.yml -p easy-generator up -d --build
+            docker compose -f docker-prod-compose.yml -p easy-generator up -d --build
             echo "Images built"
             whoami
             ls -al

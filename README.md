@@ -206,18 +206,18 @@ The following secrets need to be configured in your GitHub repository settings:
 
 The following environment variables are used in the workflow:
 
-| Variable              | Description                                  | Example                       |
-|-----------------------|----------------------------------------------|-------------------------------|
-| `MONGODB_DB`          | Name of the MongoDB database                 | `easygenerator`               |
-| `MONGODB_MODE`        | local or docker                              | `local`                       |
-| `MACHINE_EXTERNAL_IP` | External IP address of the deployment server | `123.45.67.89`                |
-| `MACHINE_INTERNAL_IP` | Internal IP address of the deployment server | `172.16.0.1`                  |
-| `BACKEND_PORT`        | Port on which the backend will run           | `3000`                        |
-| `BACKEND_NODE_ENV`    | Node.js environment                          | `production` or `development` |
-| `CLIENT_API_BASE_URL` | Base URL for frontend API calls              | `https://api.example.com`     |
-| `REMOTE_HOST`         | Hostname or IP of deployment server          | `123.45.67.89`                |
-| `REMOTE_USER`         | SSH username for deployment                  | `ubuntu`                      |
-| `REMOTE_TARGET`       | Target directory on server                   | `/home/ubuntu/app`            |
+| Variable              | Description                                  | Example                                                                            |
+|-----------------------|----------------------------------------------|------------------------------------------------------------------------------------|
+| `MONGODB_DB`          | Name of the MongoDB database                 | `easygenerator`                                                                    |
+| `MONGODB_MODE`        | local or docker                              | `local`                                                                            |
+| `MACHINE_EXTERNAL_IP` | External IP address of the deployment server | `123.45.67.89`                                                                     |
+| `MACHINE_INTERNAL_IP` | Internal IP address of the deployment server | `172.16.0.1`                                                                       |
+| `BACKEND_PORT`        | Port on which the backend will run           | `3003`                                                                             |
+| `BACKEND_NODE_ENV`    | Node.js environment                          | `production` or `development`                                                      |
+| `CLIENT_API_BASE_URL` | Base URL for frontend API calls              | `http://localhost:3003` or `/backend` consider editing nginx template to change it |
+| `REMOTE_HOST`         | Hostname or IP of deployment server          | `123.45.67.89`                                                                     |
+| `REMOTE_USER`         | SSH username for deployment                  | `ubuntu`                                                                           |
+| `REMOTE_TARGET`       | Target directory on server                   | `/home/ubuntu/app`                                                                 |
 
 These variables are used to dynamically generate configuration files during deployment and ensure proper setup of both development and production environments. The workflow automatically selects the correct environment based on the branch being pushed.
 

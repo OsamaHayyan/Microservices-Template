@@ -11,6 +11,7 @@ import {jwtDecode} from "jwt-decode";
 import dayjs from "dayjs";
 import {RefreshTokenRes} from "@/types/AuthenticationTypes/RefreshTokenTypes.ts";
 import {getTokenLocalStorage, removeTokenLocalStorage, setTokenLocalStorage} from "@/utils/TokenLocalStorage.ts";
+import {isIncludeText} from "@/utils/isIncludeText.ts";
 
 class AxiosAdapter implements IHttpClient {
     private readonly axiosInstance: AxiosInstance;
@@ -99,8 +100,7 @@ class AxiosAdapter implements IHttpClient {
     }
 
     private async CheckTokenExpAndRefresh(req: InternalAxiosRequestConfig) {
-        console.log("urls is: ", req?.url)
-        if (req.url?.includes(this.refreshTokenEndpoint)) {
+        if (isIncludeText(req.url, [this.refreshTokenEndpoint])) {
             return req;
         }
 
@@ -120,7 +120,7 @@ class AxiosAdapter implements IHttpClient {
 
     private async refreshTokenOnUnauthorizedResponse (error: AxiosError) {
         const originalRequest = error.config as AxiosRequestConfig & { retry?: boolean };
-        if (originalRequest.url?.includes(this.refreshTokenEndpoint)) {
+        if (isIncludeText(originalRequest.url, [this.refreshTokenEndpoint, '/logout'])) {
             return this.axiosInstance(originalRequest);
         }
         if (error.response?.status === 401 && !originalRequest.retry) {

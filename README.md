@@ -1,3 +1,25 @@
+<!-- TOC -->
+* [Project Overview](#project-overview)
+    * [Features](#features)
+* [Development Setup](#development-setup)
+    * [Prerequisites](#prerequisites)
+    * [Running All Systems](#running-all-systems)
+    * [Running All Systems With Docker](#running-all-systems-with-docker)
+    * [To connect to MongoDB running in Docker:](#to-connect-to-mongodb-running-in-docker)
+    * [Access via MongoDB Compass](#access-via-mongodb-compass)
+      * [It's important to do the Prerequisites to run MongodDB Replica sets correctly or the backend and database won't run.](#its-important-to-do-the-prerequisites-to-run-mongoddb-replica-sets-correctly-or-the-backend-and-database-wont-run)
+* [MongoDB Replica Set Configuration](#mongodb-replica-set-configuration)
+    * [Replica Set Requirements _(pre-configured in docker-compose)_](#replica-set-requirements-_pre-configured-in-docker-compose_)
+    * [Network Configuration](#network-configuration)
+    * [Initialization Process](#initialization-process)
+* [Deployment](#deployment)
+    * [Prerequisites](#prerequisites-1)
+    * [Deployment Steps](#deployment-steps)
+* [CI/CD Configuration](#cicd-configuration)
+    * [GitHub Actions Secrets](#github-actions-secrets)
+    * [GitHub Actions Environment Variables](#github-actions-environment-variables)
+<!-- TOC -->
+
 # Project Overview
 
 This project consists of three main modules:
@@ -27,7 +49,7 @@ production deployment and ready to use with SSH on cloud virtual machine.
 
 ---
 
-## Development Setup
+# Development Setup
 
 ### Prerequisites
 
@@ -124,7 +146,7 @@ production deployment and ready to use with SSH on cloud virtual machine.
 
 ---
 
-## MongoDB Replica Set Configuration
+# MongoDB Replica Set Configuration
 
 The application uses a MongoDB replica set with one primary and two secondary nodes for high availability and data redundancy. The replica set is configured in the Docker Compose file with the following rules:
 
@@ -151,7 +173,7 @@ The replica set is automatically initialized by the `mongo-primary` container us
 
 ---
 
-## Deployment
+# Deployment
 
 ### Prerequisites
 [MongoDB Replica Set Configuration](#mongodb-replica-set-configuration)
@@ -161,7 +183,7 @@ Deployment is automated through the CI/CD pipeline:
 1. Create development and production environment in GitHub workflow and add below secrets and env.
 2. push to the development or production branches to start the deployment process.
 
-## CI/CD Configuration
+# CI/CD Configuration
 
 ### GitHub Actions Secrets
 

@@ -81,7 +81,7 @@ class AxiosAdapter implements IHttpClient {
             throw errorResponse({
                 message: e.response?.data?.message || e.message,
                 error: e.response?.data?.error,
-                status: e.response?.status
+                status: e.response?.statusCode
             });
         }
     }
@@ -141,6 +141,7 @@ class AxiosAdapter implements IHttpClient {
                 return Promise.reject(refreshError);
             }
         }
+        return Promise.reject(error);
     }
 }
 

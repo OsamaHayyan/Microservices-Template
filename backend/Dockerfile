@@ -23,7 +23,7 @@ RUN chown -R node:node /usr/src/app
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
 # Copying this first prevents re-running npm install on every code change.
-COPY --chown=node:node ./.env.local ./.env
+COPY --chown=node:node .env .env
 
 # Bundle app source
 COPY --chown=node:node . ./
@@ -42,10 +42,10 @@ WORKDIR /usr/src/app
 RUN chown -R node:node /usr/src/app
 
 # Copy the pre-built backend from the CI/CD pipeline
-COPY --chown=node:node ./package*.json ./
-COPY --chown=node:node ./.env ./.env
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node .env .env
 COPY --chown=node:node --from=dependencies /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node ./dist ./dist
+COPY --chown=node:node dist ./dist
 
 ENV NODE_ENV=production
 

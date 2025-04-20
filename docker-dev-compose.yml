@@ -49,13 +49,12 @@ services:
       chown mongodb:mongodb /data/keyfile.key &&
       /usr/local/bin/docker-entrypoint.sh mongod --replSet rs0 --keyFile /data/keyfile.key --bind_ip_all --port 27017'
     image: 'mongo:7.0.0'
+    env_file:
+      - .env
     ports:
-      #Use the INTERNAL host IP address to bind the port
       - "${MACHINE_INTERNAL_IP}:27017:27017"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    env_file:
-      - .env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
@@ -81,8 +80,9 @@ services:
   mongo-secondary-2:
     container_name: "mongo-secondary-2"
     image: 'mongo:7.0.0'
+    env_file:
+      - .env
     ports:
-        #Use the INTERNAL host IP address to bind the port
       - "${MACHINE_INTERNAL_IP}:27018:27018"
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -98,8 +98,9 @@ services:
   mongo-secondary-3:
     container_name: 'mongo-secondary-3'
     image: 'mongo:7.0.0'
+    env_file:
+      - .env
     ports:
-      #Use the INTERNAL host IP address to bind the port
       - "${MACHINE_INTERNAL_IP}:27019:27019"
     extra_hosts:
       - "host.docker.internal:host-gateway"

@@ -7,13 +7,13 @@ COPY ./package*.json ./
 FROM base AS development
 RUN npm ci
 COPY . .
-COPY .env.local .env
+COPY .env .env
 EXPOSE 5173
 
 FROM base AS build
 COPY . .
 COPY --from=development /app/node_modules ./node_modules
-COPY .env.production .env
+COPY .env .env
 
 RUN npm run build
 

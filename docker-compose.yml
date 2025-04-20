@@ -106,6 +106,8 @@ services:
   mongo-secondary-2:
     container_name: "mongo-secondary-2"
     image: 'mongo:7.0.0'
+    env_file:
+      - .env
     ports:
       - "${MACHINE_INTERNAL_IP}:27018:27018"
     extra_hosts:
@@ -122,6 +124,8 @@ services:
   mongo-secondary-3:
     container_name: 'mongo-secondary-3'
     image: 'mongo:7.0.0'
+    env_file:
+      - .env
     ports:
       - "${MACHINE_INTERNAL_IP}:27019:27019"
     extra_hosts:

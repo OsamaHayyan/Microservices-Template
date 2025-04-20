@@ -4,14 +4,15 @@ import {ConfigModule} from '@nestjs/config';
 import {UsersModule} from './users/users.module';
 import {JwtModule} from './jwt/jwt.module';
 import {AuthModule} from './auth/auth.module';
+import dbConfig from './config/dbConfig';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env.local', '.env'],
+            envFilePath: ['.env'],
         }),
-        MongooseModule.forRoot(`mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@mongo-primary:27017,mongo-secondary-2:27018,mongo-secondary-3:27019/${process.env.MONGODB_DB}?authSource=admin&replicaSet=rs0`),
+        MongooseModule.forRoot(dbConfig()),
         UsersModule,
         JwtModule,
         AuthModule

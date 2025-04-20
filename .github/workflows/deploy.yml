@@ -39,7 +39,7 @@ jobs:
           cat <<- EOF > backend/.env
           MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }}
           MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}
-          MONGODB_DB=${{ secrets.MONGODB_DB }}
+          MONGODB_DB=${{ vars.MONGODB_DB }}
           PORT=${{ vars.BACKEND_PORT }}
           JWT_ACCESS_SECRET=${{ secrets.BACKEND_JWT_ACCESS_SECRET }}
           JWT_REFRESH_SECRET=${{ secrets.BACKEND_JWT_REFRESH_SECRET }}

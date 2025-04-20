@@ -64,7 +64,7 @@ jobs:
       # Step 7: Install dependencies and build Client app
       - name: Install & Build Client
         run: |
-          cd client
+          cd frontend
           npm ci
           npm run build
           rm -rf node_modules

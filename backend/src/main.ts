@@ -13,7 +13,7 @@ async function bootstrap() {
     app.use(cookieParser());
     app.useGlobalPipes(new ValidationPipe());
 
-    const config = new DocumentBuilder().setTitle('EasyGenerator Task API').setDescription('API documentation for EasyGenerator Task').setVersion('1.0').build();
+    const config = new DocumentBuilder().setTitle('Microservices Template API').setDescription('API documentation for Microservices Template').setVersion('1.0').build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api-docs', app, document);
 

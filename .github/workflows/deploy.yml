@@ -1,4 +1,4 @@
-name: Easy Generator CI
+  name: Microservices Template CI
 
 on:
   push:
@@ -86,7 +86,7 @@ jobs:
             echo "current directory"
             pwd
             echo "Building docker images"
-            docker compose -f docker-prod-compose.yml -p easy-generator up -d --build
+            docker compose -f docker-prod-compose.yml -p microservices-template up -d --build
             echo "Images built"
             whoami
             ls -al

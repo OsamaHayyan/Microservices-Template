@@ -74,11 +74,11 @@ production deployment and ready to use with SSH on cloud virtual machine.
    ```bash
    cd backend
    cat <<- EOF > .env
-   MONGODB_DB=easygenerator
+   MONGODB_DB=microservices_template
    MONGODB_MODE=local
    PORT=3003
-   JWT_ACCESS_SECRET=easygenerator_access_token_secret
-   JWT_REFRESH_SECRET=easygenerator_refresh_token_secret_here
+   JWT_ACCESS_SECRET=microservices_template_access_token_secret
+   JWT_REFRESH_SECRET=microservices_template_refresh_token_secret_here
    NODE_ENV=development
    EOF
    ``` 
@@ -103,13 +103,13 @@ production deployment and ready to use with SSH on cloud virtual machine.
    ```bash
    cd backend
    cat <<- EOF > .env
-   MONGODB_USERNAME=easygenerator
-   MONGODB_PASSWORD=easygenerator_password
-   MONGODB_DB=easygenerator
+   MONGODB_USERNAME=microservices_template
+   MONGODB_PASSWORD=microservices_template_password
+   MONGODB_DB=microservices_template
    MONGODB_MODE=docker
    PORT=3003
-   JWT_ACCESS_SECRET=easygenerator_access_token_secret
-   JWT_REFRESH_SECRET=easygenerator_refresh_token_secret_here
+   JWT_ACCESS_SECRET=microservices_template_access_token_secret
+   JWT_REFRESH_SECRET=microservices_template_refresh_token_secret_here
    NODE_ENV=development
    EOF
    ``` 
@@ -123,9 +123,9 @@ production deployment and ready to use with SSH on cloud virtual machine.
 3. **Generate .env file for database and set the env**
    ```bash
    cat <<- EOF > .env
-   MONGODB_USERNAME=easygenerator
-   MONGODB_PASSWORD=easygenerator_password
-   MONGODB_DB=easygenerator
+   MONGODB_USERNAME=microservices_template
+   MONGODB_PASSWORD=microservices_template_password
+   MONGODB_DB=microservices_template
    MACHINE_EXTERNAL_IP=host.docker.internal
    MACHINE_INTERNAL_IP=0.0.0.0
    EOF
@@ -146,7 +146,7 @@ production deployment and ready to use with SSH on cloud virtual machine.
 2. Open MongoDB Compass.
 3. Connect to the database using the following connection string:
     - **Connection String**:
-      `mongodb://easygenerator:easygenerator_password@127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/`
+      `mongodb://microservices_template:microservices_template_password@127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/`
 
 **It's important to do the Prerequisites to run MongodDB Replica sets correctly or the backend and database won't run.**
 
@@ -206,18 +206,18 @@ The following secrets need to be configured in your GitHub repository settings:
 
 The following environment variables are used in the workflow:
 
-| Variable              | Description                                  | Example                       |
-|-----------------------|----------------------------------------------|-------------------------------|
-| `MONGODB_DB`          | Name of the MongoDB database                 | `easygenerator`               |
-| `MONGODB_MODE`        | local or docker                              | `local`                       |
-| `MACHINE_EXTERNAL_IP` | External IP address of the deployment server | `123.45.67.89`                |
-| `MACHINE_INTERNAL_IP` | Internal IP address of the deployment server | `172.16.0.1`                  |
-| `BACKEND_PORT`        | Port on which the backend will run           | `3000`                        |
-| `BACKEND_NODE_ENV`    | Node.js environment                          | `production` or `development` |
-| `CLIENT_API_BASE_URL` | Base URL for frontend API calls              | `https://api.example.com`     |
-| `REMOTE_HOST`         | Hostname or IP of deployment server          | `123.45.67.89`                |
-| `REMOTE_USER`         | SSH username for deployment                  | `ubuntu`                      |
-| `REMOTE_TARGET`       | Target directory on server                   | `/home/ubuntu/app`            |
+| Variable              | Description                                  | Example                                                                            |
+|-----------------------|----------------------------------------------|------------------------------------------------------------------------------------|
+| `MONGODB_DB`          | Name of the MongoDB database                 | `microservices_template`                                                                    |
+| `MONGODB_MODE`        | local or docker                              | `local`                                                                            |
+| `MACHINE_EXTERNAL_IP` | External IP address of the deployment server | `123.45.67.89`                                                                     |
+| `MACHINE_INTERNAL_IP` | Internal IP address of the deployment server | `172.16.0.1`                                                                       |
+| `BACKEND_PORT`        | Port on which the backend will run           | `3003`                                                                             |
+| `BACKEND_NODE_ENV`    | Node.js environment                          | `production` or `development`                                                      |
+| `CLIENT_API_BASE_URL` | Base URL for frontend API calls              | `http://localhost:3003` or `/backend` consider editing nginx template to change it |
+| `REMOTE_HOST`         | Hostname or IP of deployment server          | `123.45.67.89`                                                                     |
+| `REMOTE_USER`         | SSH username for deployment                  | `ubuntu`                                                                           |
+| `REMOTE_TARGET`       | Target directory on server                   | `/home/ubuntu/app`                                                                 |
 
 These variables are used to dynamically generate configuration files during deployment and ensure proper setup of both development and production environments. The workflow automatically selects the correct environment based on the branch being pushed.
 

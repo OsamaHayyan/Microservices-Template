@@ -1,4 +1,4 @@
-  name: Microservices Template CI
+name: Microservices Template CI
 
 on:
   push:

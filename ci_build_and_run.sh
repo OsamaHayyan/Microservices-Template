@@ -9,7 +9,7 @@ cat <<- EOF > .env
 MONGODB_USERNAME=${MONGODB_USERNAME:-microservices_template}
 MONGODB_PASSWORD=${MONGODB_PASSWORD:-microservices_template_password}
 MONGODB_DB=${MONGODB_DB:-microservices_template}
-MACHINE_EXTERNAL_IP=${MACHINE_EXTERNAL_IP:-127.0.0.1}
+MACHINE_EXTERNAL_IP=${MACHINE_EXTERNAL_IP:-host.docker.internal}
 EOF
 
 # --- STEP 2: Generate Backend .env ---

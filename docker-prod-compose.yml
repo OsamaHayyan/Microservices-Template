@@ -60,9 +60,9 @@
         - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
         - MONGO_INITDB_DATABASE=${MONGODB_DB}
       volumes:
-        - 'mongo-primary-data-stage:/data/db'
-        - 'mongo-primary-config-stage:/data/configdb'
-        - 'sharedconfig-stage:/data'  # Shared volume for keyfile
+        - 'mongo-primary-data:/data/db'
+        - 'mongo-primary-config:/data/configdb'
+        - 'sharedconfig:/data'  # Shared volume for keyfile
       healthcheck:
         test: mongosh
           -u $${MONGO_INITDB_ROOT_USERNAME}
@@ -87,9 +87,9 @@
       extra_hosts:
         - "host.docker.internal:host-gateway"
       volumes:
-        - 'mongo-secondary-2-data-stage:/data/db'
-        - 'mongo-secondary-2-config-stage:/data/configdb'
-        - 'sharedconfig-stage:/data'  # Shared volume for keyfile
+        - 'mongo-secondary-2-data:/data/db'
+        - 'mongo-secondary-2-config:/data/configdb'
+        - 'sharedconfig:/data'  # Shared volume for keyfile
       command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27018", "--keyFile", "/data/keyfile.key" ]
       networks:
         - mongo-cluster
@@ -107,9 +107,9 @@
       extra_hosts:
         - "host.docker.internal:host-gateway"
       volumes:
-        - 'mongo-secondary-3-data-stage:/data/db'
-        - 'mongo-secondary-3-config-stage:/data/configdb'
-        - 'sharedconfig-stage:/data'  # Shared volume for keyfile
+        - 'mongo-secondary-3-data:/data/db'
+        - 'mongo-secondary-3-config:/data/configdb'
+        - 'sharedconfig:/data'  # Shared volume for keyfile
       command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27019", "--keyFile", "/data/keyfile.key" ]
       networks:
         - mongo-cluster
@@ -123,10 +123,10 @@
     mongo-cluster:
 
   volumes:
-    mongo-primary-data-stage:
-    mongo-primary-config-stage:
-    mongo-secondary-2-data-stage:
-    mongo-secondary-2-config-stage:
-    mongo-secondary-3-data-stage:
-    mongo-secondary-3-config-stage:
-    sharedconfig-stage:
+    mongo-primary-data:
+    mongo-primary-config:
+    mongo-secondary-2-data:
+    mongo-secondary-2-config:
+    mongo-secondary-3-data:
+    mongo-secondary-3-config:
+    sharedconfig:

@@ -13,7 +13,7 @@ async function bootstrap() {
     app.use(cookieParser());
     app.useGlobalPipes(new ValidationPipe());
 
-    const config = new DocumentBuilder().setTitle('Microservices Template API').setDescription('API documentation for Microservices Template').setVersion('1.0').build();
+    const config = new DocumentBuilder().setTitle('Microservices Template API').setDescription('API documentation for Microservices Template').setVersion('1.0').addServer(process.env.NODE_ENV === "production" ? '/backend' : '').build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api-docs', app, document);
 

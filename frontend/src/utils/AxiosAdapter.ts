@@ -15,7 +15,7 @@ import {isIncludeText} from "@/utils/isIncludeText.ts";
 
 class AxiosAdapter implements IHttpClient {
     private readonly axiosInstance: AxiosInstance;
-    private readonly refreshTokenEndpoint = `${import.meta.env.VITE_BACKEND_API}/auth/refresh-token`;
+    private readonly refreshTokenEndpoint = `/refresh-token`;
     constructor(config?: CreateAxiosDefaults) {
         this.axiosInstance = axios.create({
             ...config,
@@ -100,7 +100,7 @@ class AxiosAdapter implements IHttpClient {
     }
 
     private async CheckTokenExpAndRefresh(req: InternalAxiosRequestConfig) {
-        if (isIncludeText(req.url, [this.refreshTokenEndpoint])) {
+        if (isIncludeText(req.url, [this.refreshTokenEndpoint, '/logout'])) {
             return req;
         }
 

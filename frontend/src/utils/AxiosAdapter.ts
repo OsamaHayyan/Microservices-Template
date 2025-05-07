@@ -121,7 +121,7 @@ class AxiosAdapter implements IHttpClient {
     private async refreshTokenOnUnauthorizedResponse (error: AxiosError) {
         const originalRequest = error.config as AxiosRequestConfig & { retry?: boolean };
         if (isIncludeText(originalRequest.url, [this.refreshTokenEndpoint, '/logout'])) {
-            return this.axiosInstance(originalRequest);
+            return Promise.reject(error);
         }
         if (error.response?.status === 401 && !originalRequest.retry) {
             try {

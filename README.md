@@ -127,7 +127,6 @@ production deployment and ready to use with SSH on cloud virtual machine.
    MONGODB_PASSWORD=microservices_template_password
    MONGODB_DB=microservices_template
    MACHINE_EXTERNAL_IP=host.docker.internal
-   MACHINE_INTERNAL_IP=0.0.0.0
    EOF
    ```  
 4. **Use the following command to start the entire environment in development mode with hot reload mode:**
@@ -174,7 +173,7 @@ The replica set is automatically initialized by the `mongo-primary` container us
 
 - `MONGODB_USERNAME` and `MONGODB_PASSWORD`: For authentication (defined as secrets)
 - `MONGODB_DB`: Database name
-- `MACHINE_EXTERNAL_IP` and `MACHINE_INTERNAL_IP`: For proper replica set communication
+- `MACHINE_EXTERNAL_IP`: For proper replica set communication
 
 ---
 
@@ -208,10 +207,9 @@ The following environment variables are used in the workflow:
 
 | Variable              | Description                                  | Example                                                                            |
 |-----------------------|----------------------------------------------|------------------------------------------------------------------------------------|
-| `MONGODB_DB`          | Name of the MongoDB database                 | `microservices_template`                                                                    |
+| `MONGODB_DB`          | Name of the MongoDB database                 | `microservices_template`                                                           |
 | `MONGODB_MODE`        | local or docker                              | `local`                                                                            |
 | `MACHINE_EXTERNAL_IP` | External IP address of the deployment server | `123.45.67.89`                                                                     |
-| `MACHINE_INTERNAL_IP` | Internal IP address of the deployment server | `172.16.0.1`                                                                       |
 | `BACKEND_PORT`        | Port on which the backend will run           | `3003`                                                                             |
 | `BACKEND_NODE_ENV`    | Node.js environment                          | `production` or `development`                                                      |
 | `CLIENT_API_BASE_URL` | Base URL for frontend API calls              | `http://localhost:3003` or `/backend` consider editing nginx template to change it |

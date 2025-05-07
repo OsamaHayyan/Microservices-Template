@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/easygenerator_task.iml" filepath="$PROJECT_DIR$/.idea/easygenerator_task.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Microservices_Template.iml" filepath="$PROJECT_DIR$/.idea/Microservices_Template.iml" />
     </modules>
   </component>
 </project>

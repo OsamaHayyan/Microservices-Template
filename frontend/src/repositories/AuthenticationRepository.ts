@@ -29,7 +29,6 @@ class AuthenticationRepository {
 
     async logout() {
         try {
-            console.log("test here")
             return await this.httpClient.post(`/logout`, null, {withCredentials: true});
         } catch (error) {
             console.error('Error while logout', error);

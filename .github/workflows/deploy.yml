@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Default environments: 'development' for the 'development' branch and 'production' for the 'production' branch.
+    # You can modify this logic to add or change environments.
     environment: ${{ github.ref == 'refs/heads/production' && 'production' || 'development' }}
 
     steps:
@@ -30,7 +32,6 @@ jobs:
           MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}
           MONGODB_DB=${{ vars.MONGODB_DB }}
           MACHINE_EXTERNAL_IP=${{ vars.MACHINE_EXTERNAL_IP }}
-          MACHINE_INTERNAL_IP=${{ vars.MACHINE_INTERNAL_IP }}
           EOF
 
       # Step 4: Generate Backend Environment File
@@ -91,3 +92,4 @@ jobs:
             whoami
             ls -al
             echo $RSYNC_STDOUT
+

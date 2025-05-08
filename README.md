@@ -1,29 +1,34 @@
 <!-- TOC -->
 * [Project Overview](#project-overview)
-    * [This project consists of three main modules:](#this-project-consists-of-three-main-modules)
+    * [Purpose](#purpose)
+    * [Main modules](#main-modules)
     * [Features](#features)
-* [API Documentation is available at the following link after starting the backend server:](#api-documentation-is-available-at-the-following-link-after-starting-the-backend-server)
+* [API Documentation](#api-documentation)
 * [Development Setup](#development-setup)
     * [Prerequisites](#prerequisites)
     * [Running All Systems](#running-all-systems)
     * [Running All Systems With Docker](#running-all-systems-with-docker)
+    * [CI/CD Production Script Simulator for Local Development](#cicd-production-script-simulator-for-local-development)
+      * [Script Usage](#script-usage)
 * [To connect to MongoDB running in Docker:](#to-connect-to-mongodb-running-in-docker)
     * [Access via MongoDB Compass](#access-via-mongodb-compass)
 * [MongoDB Replica Set Configuration](#mongodb-replica-set-configuration)
     * [Replica Set Requirements _(pre-configured in docker-compose)_](#replica-set-requirements-_pre-configured-in-docker-compose_)
-    * [Network Configuration](#network-configuration)
     * [Initialization Process](#initialization-process)
-* [Deployment](#deployment)
-    * [Prerequisites](#prerequisites-1)
-    * [Deployment Steps](#deployment-steps)
 * [CI/CD Configuration](#cicd-configuration)
     * [GitHub Actions Secrets](#github-actions-secrets)
     * [GitHub Actions Environment Variables](#github-actions-environment-variables)
+    * [Default GitHub Environments](#default-github-environments)
+* [Deployment](#deployment)
+    * [Prerequisites](#prerequisites-1)
+    * [Deployment Steps](#deployment-steps)
 <!-- TOC -->
 
 # Project Overview
 
-### This project consists of three main modules:
+### Purpose
+This project serves as a template for building microservices using Docker, NestJS, ReactJs, and MongoDB. It is designed to be
+### Main modules
 
 1. **Client-side Application**: Built with React and Vite.
 2. **NestJS Server**: As the backend server and authentication server for client side.
@@ -51,21 +56,23 @@ production deployment and ready to use with SSH on cloud virtual machine.
 
 ---
 
-# API Documentation is available at the following link after starting the backend server:
-[API Documentation](http://localhost:3003/api-docs)
+# API Documentation
+
+The API documentation is available at the following URLs depending on your environment:
+
+- **Demo Environment**: [http://130.61.130.252:8080/backend/api-docs](http://130.61.130.252:8080/backend/api-docs)
+- **Local Development**: [http://localhost:3003/api-docs](http://localhost:3003/api-docs)
+- **Local Production Simulation**: [http://localhost:8080/backend/api-docs](http://localhost:8080/backend/api-docs)
+
+The demo site is accessible at: [http://130.61.130.252:8080/](http://130.61.130.252:8080/)
 
 ---
 # Development Setup
 
 ### Prerequisites
 
-1. **Add the `*.docker.internal` names to the host's /etc/hosts file:**
-   ```
-   127.0.0.1 host.docker.internal
-   127.0.0.1 gateway.docker.internal
-   ```
-2. **Ports `27017`, `27018`, `27019` should be free for database replica sets**.
-3. **Install Docker and Docker Compose**: Ensure you have Docker and Docker Compose installed on your machine.
+1. **Ports `27017`, `27018`, `27019` should be free for database replica sets**.
+2. **Install Docker and Docker Compose**: Ensure you have Docker and Docker Compose installed on your machine.
 
 ### Running All Systems
 
@@ -127,7 +134,6 @@ production deployment and ready to use with SSH on cloud virtual machine.
    MONGODB_PASSWORD=microservices_template_password
    MONGODB_DB=microservices_template
    MACHINE_EXTERNAL_IP=host.docker.internal
-   MACHINE_INTERNAL_IP=0.0.0.0
    EOF
    ```  
 4. **Use the following command to start the entire environment in development mode with hot reload mode:**
@@ -135,6 +141,23 @@ production deployment and ready to use with SSH on cloud virtual machine.
    ```bash
    docker compose watch
    ```
+
+### CI/CD Production Script Simulator for Local Development
+
+To simulate the CI/CD production deployment process locally, a script named `ci_build_and_run.sh` is provided. This script replicates the steps performed in the CI/CD pipeline, including generating `.env` files, building the backend and frontend, and starting the Docker containers.
+
+#### Script Usage
+1. Ensure all prerequisites are met (e.g., Docker is installed, required ports are free).
+2. Run the script:
+   ```bash
+   ./ci_build_and_run.sh
+   ```
+3. The script will:
+   - Generate `.env` files for the database, backend, and frontend.
+   - Build the backend and frontend applications.
+   - Start the Docker containers in production mode.
+
+This script is useful for testing the production deployment process locally before pushing changes to the CI/CD pipeline.
 
 ---
 
@@ -162,31 +185,16 @@ The application uses a MongoDB replica set with one primary and two secondary no
 - Secondary replicas (mongo-secondary-2, mongo-secondary-3) have priority 0.5
 - All members point to the host machine's external IP address for proper communication
 
-### Network Configuration
-To run the MongoDB replica set properly, you must add the following to your host machine's `/etc/hosts` file:
-```
-0.0.0.0 host.docker.internal      # Change to the internal IP of your host machine
-0.0.0.0 gateway.docker.internal   # Change to the internal IP of your host machine
-```
-
 ### Initialization Process
 The replica set is automatically initialized by the `mongo-primary` container using a healthcheck command that configures the replica set topology. For proper operation in both development and production environments, you must specify these environment variables and secrets in your GitHub workflow:
 
 - `MONGODB_USERNAME` and `MONGODB_PASSWORD`: For authentication (defined as secrets)
 - `MONGODB_DB`: Database name
-- `MACHINE_EXTERNAL_IP` and `MACHINE_INTERNAL_IP`: For proper replica set communication
+- `MACHINE_EXTERNAL_IP`: For proper replica set communication
+
+To see all environment click here: [Environment](#cicd-configuration)
 
 ---
-
-# Deployment
-
-### Prerequisites
-[MongoDB Replica Set Configuration](#mongodb-replica-set-configuration)
-
-### Deployment Steps
-Deployment is automated through the CI/CD pipeline:
-1. Create development and production environment in GitHub workflow and add below secrets and env.
-2. push to the development or production branches to start the deployment process.
 
 # CI/CD Configuration
 
@@ -208,10 +216,9 @@ The following environment variables are used in the workflow:
 
 | Variable              | Description                                  | Example                                                                            |
 |-----------------------|----------------------------------------------|------------------------------------------------------------------------------------|
-| `MONGODB_DB`          | Name of the MongoDB database                 | `microservices_template`                                                                    |
+| `MONGODB_DB`          | Name of the MongoDB database                 | `microservices_template`                                                           |
 | `MONGODB_MODE`        | local or docker                              | `local`                                                                            |
 | `MACHINE_EXTERNAL_IP` | External IP address of the deployment server | `123.45.67.89`                                                                     |
-| `MACHINE_INTERNAL_IP` | Internal IP address of the deployment server | `172.16.0.1`                                                                       |
 | `BACKEND_PORT`        | Port on which the backend will run           | `3003`                                                                             |
 | `BACKEND_NODE_ENV`    | Node.js environment                          | `production` or `development`                                                      |
 | `CLIENT_API_BASE_URL` | Base URL for frontend API calls              | `http://localhost:3003` or `/backend` consider editing nginx template to change it |
@@ -219,5 +226,53 @@ The following environment variables are used in the workflow:
 | `REMOTE_USER`         | SSH username for deployment                  | `ubuntu`                                                                           |
 | `REMOTE_TARGET`       | Target directory on server                   | `/home/ubuntu/app`                                                                 |
 
-These variables are used to dynamically generate configuration files during deployment and ensure proper setup of both development and production environments. The workflow automatically selects the correct environment based on the branch being pushed.
+### Default GitHub Environments
 
+The CI/CD pipeline is configured to use `development` and `production` as the default environments. These environments are automatically selected based on the branch being pushed:
+- **`development`**: Used when pushing to the `development` branch.
+- **`production`**: Used when pushing to the `production` branch.
+
+If you need to change the default environments or add new ones, you can manually update the workflow file located at `.github/workflows/deploy.yml`. Modify the `environment` variable in the workflow to match your desired environment setup.
+
+For example:
+```yaml
+environment: ${{ github.ref == 'refs/heads/production' && 'production' || 'development' }}
+```
+
+This logic ensures that the correct environment is selected based on the branch name.
+
+---
+
+# Deployment
+
+### Prerequisites
+
+1. **MongoDB Replica Set Configuration**:  
+   Ensure the MongoDB replica set is properly configured. Refer to the [MongoDB Replica Set Configuration](#mongodb-replica-set-configuration) section for details.
+
+2. **Virtual Cloud Network (VCN) Security Rules**:  
+   Configure the Virtual Cloud Network (VCN) on your cloud platform with the following security rules:
+
+   #### Ingress Rules:
+   1. **Allow TCP traffic for MongoDB replica sets for internal communication**:  
+      - Protocol: `TCP`
+      - Ports: `27017`, `27018`, `27019`  
+      - CIDR: `MACHINE_EXTERNAL_IP/32` 
+      
+   2. **Allow general access on port 8080 for client side**:
+       - Protocol: `TCP`
+       - Port: `8080`
+       - CIDR: `0.0.0.0/0`
+      
+   3. **Restrict access to MongoDB replica sets externally via Static VPN IP (Optional)**:  
+      - Protocol: `TCP`
+      - Ports: `27017`, `27018`, `27019`
+      - CIDR: `STATIC_VPN_IP/32`
+
+   These rules ensure proper communication for `MongoDB replica sets`, secure access via OpenVPN, and allow traffic on port 8080 for both TCP and UDP protocols.
+
+### Deployment Steps
+Deployment is automated through the CI/CD pipeline:
+1. Create development and production environment in GitHub workflow and add below secrets and env.
+2. push to the development or production branches to start the deployment process.
+`

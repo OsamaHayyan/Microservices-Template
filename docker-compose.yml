@@ -76,9 +76,7 @@ services:
       /usr/local/bin/docker-entrypoint.sh mongod --replSet rs0 --keyFile /data/keyfile.key --bind_ip_all --port 27017'
     image: 'mongo:7.0.0'
     ports:
-      - "${MACHINE_INTERNAL_IP}:27017:27017"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "27017:27017"
     env_file:
       - .env
     environment:
@@ -88,7 +86,7 @@ services:
     volumes:
       - 'mongo-primary-data-dev:/data/db'
       - 'mongo-primary-config-dev:/data/configdb'
-      - 'sharedconfig-dev:/data'
+      - 'shared-config-dev:/data'
     healthcheck:
       test: mongosh
         -u $${MONGO_INITDB_ROOT_USERNAME}
@@ -109,13 +107,11 @@ services:
     env_file:
       - .env
     ports:
-      - "${MACHINE_INTERNAL_IP}:27018:27018"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "27018:27018"
     volumes:
       - 'mongo-secondary-2-data-dev:/data/db'
       - 'mongo-secondary-2-config-dev:/data/configdb'
-      - 'sharedconfig-dev:/data'
+      - 'shared-config-dev:/data'
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27018", "--keyFile", "/data/keyfile.key" ]
     networks:
       - mongo-cluster
@@ -127,13 +123,11 @@ services:
     env_file:
       - .env
     ports:
-      - "${MACHINE_INTERNAL_IP}:27019:27019"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "27019:27019"
     volumes:
       - 'mongo-secondary-3-data-dev:/data/db'
       - 'mongo-secondary-3-config-dev:/data/configdb'
-      - 'sharedconfig-dev:/data'
+      - 'shared-config-dev:/data'
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27019", "--keyFile", "/data/keyfile.key" ]
     networks:
       - mongo-cluster
@@ -151,4 +145,4 @@ volumes:
   mongo-secondary-2-config-dev:
   mongo-secondary-3-data-dev:
   mongo-secondary-3-config-dev:
-  sharedconfig-dev:
+  shared-config-dev:

@@ -275,4 +275,3 @@ This logic ensures that the correct environment is selected based on the branch 
 Deployment is automated through the CI/CD pipeline:
 1. Create development and production environment in GitHub workflow and add below secrets and env.
 2. push to the development or production branches to start the deployment process.
-`

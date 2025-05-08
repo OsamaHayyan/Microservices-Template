@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Default environments: 'development' for the 'development' branch and 'production' for the 'production' branch.
+    # You can modify this logic to add or change environments.
     environment: ${{ github.ref == 'refs/heads/production' && 'production' || 'development' }}
 
     steps:
@@ -90,3 +92,4 @@ jobs:
             whoami
             ls -al
             echo $RSYNC_STDOUT
+

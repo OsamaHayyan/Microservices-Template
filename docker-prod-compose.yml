@@ -29,15 +29,8 @@
 
     # Rules for mongo cluster
     # All replicas must have the same keyfile
-    # The primary replica must be the first in the list
-    # The primary replica must have priority 1
-    # The secondaries must have priority 0.5
     # All Members should point to host of the machine ==> external IP ex. 34.171.172.170:27018
-    # Internal IP, External IP should be added for network policies allowed list
-    # It's important to add the following to /etc/hosts in the machine:
-    # 127.0.0.1 localhost
-    # 0.0.0.0 host.docker.internal  <== Change this IP to the internal IP of the host machine
-    # 0.0.0.0 gateway.docker.internal <== Change this IP to the internal IP of the host machine
+    # External IP should be added for network policies allowed list
 
     mongo-primary:
       container_name: 'mongo-primary'

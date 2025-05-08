@@ -14,7 +14,6 @@
     * [Access via MongoDB Compass](#access-via-mongodb-compass)
 * [MongoDB Replica Set Configuration](#mongodb-replica-set-configuration)
     * [Replica Set Requirements _(pre-configured in docker-compose)_](#replica-set-requirements-_pre-configured-in-docker-compose_)
-    * [Network Configuration](#network-configuration)
     * [Initialization Process](#initialization-process)
 * [CI/CD Configuration](#cicd-configuration)
     * [GitHub Actions Secrets](#github-actions-secrets)
@@ -65,13 +64,8 @@ production deployment and ready to use with SSH on cloud virtual machine.
 
 ### Prerequisites
 
-1. **Add the `*.docker.internal` names to the host's /etc/hosts file:**
-   ```
-   127.0.0.1 host.docker.internal
-   127.0.0.1 gateway.docker.internal
-   ```
-2. **Ports `27017`, `27018`, `27019` should be free for database replica sets**.
-3. **Install Docker and Docker Compose**: Ensure you have Docker and Docker Compose installed on your machine.
+1. **Ports `27017`, `27018`, `27019` should be free for database replica sets**.
+2. **Install Docker and Docker Compose**: Ensure you have Docker and Docker Compose installed on your machine.
 
 ### Running All Systems
 
@@ -183,13 +177,6 @@ The application uses a MongoDB replica set with one primary and two secondary no
 - The primary replica (mongo-primary) must be the first in the list with priority 1
 - Secondary replicas (mongo-secondary-2, mongo-secondary-3) have priority 0.5
 - All members point to the host machine's external IP address for proper communication
-
-### Network Configuration
-To run the MongoDB replica set properly, you must add the following to your host machine's `/etc/hosts` file:
-```
-0.0.0.0 host.docker.internal      # Change to the internal IP of your host machine
-0.0.0.0 gateway.docker.internal   # Change to the internal IP of your host machine
-```
 
 ### Initialization Process
 The replica set is automatically initialized by the `mongo-primary` container using a healthcheck command that configures the replica set topology. For proper operation in both development and production environments, you must specify these environment variables and secrets in your GitHub workflow:

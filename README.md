@@ -1,9 +1,9 @@
 <!-- TOC -->
 * [Project Overview](#project-overview)
     * [Purpose](#purpose)
-    * [This project consists of three main modules:](#this-project-consists-of-three-main-modules)
+    * [Main modules](#main-modules)
     * [Features](#features)
-* [API Documentation is available at the following link after starting the backend server:](#api-documentation-is-available-at-the-following-link-after-starting-the-backend-server)
+* [API Documentation](#api-documentation)
 * [Development Setup](#development-setup)
     * [Prerequisites](#prerequisites)
     * [Running All Systems](#running-all-systems)
@@ -28,7 +28,7 @@
 
 ### Purpose
 This project serves as a template for building microservices using Docker, NestJS, ReactJs, and MongoDB. It is designed to be
-### This project consists of three main modules:
+### Main modules
 
 1. **Client-side Application**: Built with React and Vite.
 2. **NestJS Server**: As the backend server and authentication server for client side.
@@ -56,8 +56,15 @@ production deployment and ready to use with SSH on cloud virtual machine.
 
 ---
 
-# API Documentation is available at the following link after starting the backend server:
-[API Documentation](http://localhost:3003/api-docs)
+# API Documentation
+
+The API documentation is available at the following URLs depending on your environment:
+
+- **Demo Environment**: [http://130.61.130.252:8080/backend/api-docs](http://130.61.130.252:8080/backend/api-docs)
+- **Local Development**: [http://localhost:3003/api-docs](http://localhost:3003/api-docs)
+- **Local Production Simulation**: [http://localhost:8080/backend/api-docs](http://localhost:8080/backend/api-docs)
+
+The demo site is accessible at: [http://130.61.130.252:8080/](http://130.61.130.252:8080/)
 
 ---
 # Development Setup
@@ -268,3 +275,4 @@ This logic ensures that the correct environment is selected based on the branch 
 Deployment is automated through the CI/CD pipeline:
 1. Create development and production environment in GitHub workflow and add below secrets and env.
 2. push to the development or production branches to start the deployment process.
+`

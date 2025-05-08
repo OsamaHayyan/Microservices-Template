@@ -269,7 +269,7 @@ This logic ensures that the correct environment is selected based on the branch 
       - Ports: `27017`, `27018`, `27019`
       - CIDR: `STATIC_VPN_IP/32`
 
-   These rules ensure proper communication for `MongoDB replica sets`, secure access via OpenVPN, and allow traffic on port 8080 for both TCP and UDP protocols.
+   These rules ensure proper communication for `MongoDB replica sets`, secure access via OpenVPN, and allow traffic on port 8080 for TCP protocol.
 
 ### Deployment Steps
 Deployment is automated through the CI/CD pipeline:
